@@ -1,0 +1,33 @@
+{
+  "name": "cli-nyaa",
+  "version": "1.0.0",
+  "description": "cli utility to download anime from nyaa",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HerbertVidela/nyaa-cli.git"
+  },
+  "keywords": [
+    "anime",
+    "nyaa",
+    "node",
+    "cli"
+  ],
+  "author": "Herbert V.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HerbertVidela/nyaa-cli/issues"
+  },
+  "homepage": "https://github.com/HerbertVidela/nyaa-cli#readme",
+  "dependencies": {
+    "nyaapi": "^2.1.1",
+    "webtorrent": "^0.107.17",
+    "yargs": "^15.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.1"
+  }
+}
