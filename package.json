@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/HerbertVidela/nyaa-cli#readme",
   "dependencies": {
+    "cli-progress": "^3.4.0",
     "nyaapi": "^2.1.1",
     "webtorrent": "^0.107.17",
     "yargs": "^15.0.2"

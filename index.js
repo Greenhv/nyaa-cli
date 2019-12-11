@@ -13,6 +13,7 @@ const argv = require('yargs')
 	.help('h')
 	.alias('h', 'help')
 	.argv;
+const cliProgress = require('cli-progress');
 
 const getEpisode = async fullTitle => {
 	try {
@@ -29,24 +30,32 @@ const roundToTwoDigits = value => value.toFixed(2);
 (async () => {
 	const { title, episode } = argv;
 	const searchName = `${title} ${episode}`;
-	console.log(searchName);
 
 	const foundEpisode = await getEpisode(searchName);
 
 	if (foundEpisode) {
 		const client = new WebTorrent();
 		const magnetURI = foundEpisode.magnet;
+		const cliBar = new cliProgress.SingleBar({
+			format: 'Progress [{bar}] {percentage}% | Speed: {speed} MB/s'
+		}, cliProgress.Presets.shades_classic);
 
-		console.log(`Downloading ${foundEpisode.magnet}`);
-		client.add(magnetURI, { path: '/Users/herbertvidela/Projects/Personal/cli-nyaa/' })
+		const torrent = client.add(magnetURI, { path: '/Users/herbertvidela/Projects/Personal/cli-nyaa/' });
+
+		cliBar.start(100, 0, { speed: 'N/A' });
+
 		const intervalId = setInterval(() => {
-			const progress = roundToTwoDigits(client.progress * 100);
+			const progress = parseInt(roundToTwoDigits(client.progress * 100), 10);
 			const downloadSpeed = roundToTwoDigits(client.downloadSpeed/(1024*1024));
+			cliBar.update(progress, { speed: downloadSpeed });
+		}, 1000);
 
-			console.log(progress, downloadSpeed);
-			if (client.progress === 1) {
-				clearInterval(intervalId);
-			}
-		}, 1000)
+		torrent.on('done', () => {
+			clearInterval(intervalId);
+			cliBar.update(100, { speed: 'N/A' });
+			cliBar.stop();
+			process.exit();
+		});
+
 	}
 })()
